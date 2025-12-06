@@ -3,8 +3,9 @@
 
 This module performs the addition operation between two numbers,
 these numbers can be integers or floats.
-
 """
+
+import math
 
 
 def add_integer(a, b=98):
@@ -18,7 +19,6 @@ def add_integer(a, b=98):
 
     Returns:
         int: The result of the addition.
-
     """
     if type(a) not in (int, float):
         raise TypeError('a must be an integer')
@@ -34,16 +34,20 @@ def add_integer(a, b=98):
 def convert_to_int(num):
     """Cast the data type of num parameter
 
-    Convert a float number to a integer number
+    Convert a float number to an integer number.
 
     Args:
         num (:obj:`int, float`): The number to cast.
 
     Returns:
         int: The number casted to integer.
-
     """
     if type(num) is float:
+        if math.isnan(num):
+            raise ValueError("cannot convert float NaN to integer")
+        if math.isinf(num):
+            raise OverflowError("cannot convert float infinity to integer")
+
         num = int(num)
         return num
 
