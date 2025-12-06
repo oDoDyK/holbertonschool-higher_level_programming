@@ -1,54 +1,21 @@
 #!/usr/bin/python3
-"""A module to add two numbers
-
-This module performs the addition operation between two numbers,
-these numbers can be integers or floats.
-"""
-
-import math
+"""Module for function of adding integer"""
 
 
 def add_integer(a, b=98):
-    """Adds two numbers
+    """Adding integers function"""
 
-    Performs the addition between two numbers.
+    # Checking if a and b are float or int
+    if not isinstance(a, (int, float)):
+        raise TypeError("a must be an integer")
+    if not isinstance(b, (int, float)):
+        raise TypeError("b must be an integer")
 
-    Args:
-        a (:obj:`int, float`): The first number.
-        b (:obj:`int, float`, optional): The second number.
+    # Casting to int if a and b is floating
+    if isinstance(a, float):
+        a = int(a)
+    if isinstance(b, float):
+        b = int(b)
 
-    Returns:
-        int: The result of the addition.
-    """
-    if type(a) not in (int, float):
-        raise TypeError('a must be an integer')
-
-    if type(b) not in (int, float):
-        raise TypeError('b must be an integer')
-
-    a = convert_to_int(a)
-    b = convert_to_int(b)
+    # Return sum of a and b
     return a + b
-
-
-def convert_to_int(num):
-    """Cast the data type of num parameter
-
-    Convert a float number to an integer number.
-
-    Args:
-        num (:obj:`int, float`): The number to cast.
-
-    Returns:
-        int: The number casted to integer.
-    """
-    if type(num) is float:
-        if math.isnan(num):
-            raise ValueError("cannot convert float NaN to integer")
-        if math.isinf(num):
-            raise OverflowError("cannot convert float infinity to integer")
-
-        num = int(num)
-        return num
-
-    return num
