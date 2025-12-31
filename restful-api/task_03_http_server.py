@@ -32,17 +32,15 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
             
         elif self.path == "/status":
             self.send_response(200)
-            self.send_header("Content-type", "application/json")
+            self.send_header("Content-type", "text/plain")
             self.end_headers()
-            response_data = {"status": "OK"}
-            self.wfile.write(json.dumps(response_data).encode('utf-8'))
+            self.wfile.write(b"OK")
             
         else:
             self.send_response(404)
-            self.send_header("Content-type", "application/json")
+            self.send_header("Content-type", "text/plain")
             self.end_headers()
-            error_data = {"error": "Endpoint not found"}
-            self.wfile.write(json.dumps(error_data).encode('utf-8'))
+            self.wfile.write(b"Endpoint not found")
 
 Handler = MyHandler
 with socketserver.TCPServer(("", PORT), Handler) as httpd:
