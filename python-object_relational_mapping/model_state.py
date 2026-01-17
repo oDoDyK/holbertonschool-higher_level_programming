@@ -9,6 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()  # Base class for all models
 
+
 class State(Base):
     """State class mapped to 'states' table"""
     __tablename__ = 'states'
