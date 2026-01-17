@@ -2,12 +2,14 @@
 """
 Script that takes arguments and displays all cities of a given state
 from the database hbtn_0e_4_usa.
-Results are sorted by cities.id and safe from SQL injection.
+Results are sorted by cities.id using SQLAlchemy.
 """
 
 import sys
-import MySQLdb
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from model_state import Base, State
+from model_city import City
 
 if __name__ == "__main__":
     if len(sys.argv) != 5:
@@ -15,31 +17,20 @@ if __name__ == "__main__":
 
     user = sys.argv[1]
     password = sys.argv[2]
-    database = sys.argv[3]
+    db_name = sys.argv[3]
     state_name = sys.argv[4]
 
-    db = MySQLdb.connect(
-        host="localhost",
-        user=user,
-        passwd=password,
-        db=database,
-        port=3306
-    )
+    # Create engine
+    engine = create_engine(f'mysql+mysqldb://{user}:{password}@localhost/{db_name}')
 
-    cursor = db.cursor()
+    # Bind session
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-    query = (
-        "SELECT cities.name "
-        "FROM cities "
-        "JOIN states ON cities.state_id = states.id "
-        "WHERE states.name = %s "
-        "ORDER BY cities.id ASC"
-    )
+    # Query cities for the given state
+    result = session.query(City).join(State).filter(State.name == state_name)\
+        .order_by(City.id).all()
 
-    cursor.execute(query, (state_name,))
-    rows = cursor.fetchall()
+    print(", ".join([city.name for city in result]))
 
-    print(", ".join([row[0] for row in rows]))
-
-    cursor.close()
-    db.close()
+    session.close()
